@@ -13,8 +13,10 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 
 builder.Services.AddSingleton<IOperationRepository, OperationRepository>();
+builder.Services.AddSingleton<IDeviceRepository, DeviceRepository>();
 
 
+//use cases 
 //builder.Services.AddTransient<IGet>
 
 

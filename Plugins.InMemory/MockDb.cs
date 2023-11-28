@@ -9,15 +9,26 @@ namespace Plugins.InMemory
 {
     public static class MockDb
     {
-
-
-        public static List<Device> DbDevices { get; private set; }
+        public static List<Assembly> DbAssemblies { get; set; }
         public static List<Operation> DbOperations { get; private set; }
+        public static List<Device> DbDevices { get; private set; }
+
 
         static MockDb()
         {
             InitializeDevices();
             InitializeOperations();
+        }
+
+        private static void InitializeAssemblies()
+        {
+
+            DbAssemblies = new List<Assembly>
+            {
+                  new Assembly { Id = 1, AssemblyName = "Assembly Line 1" },
+                  new Assembly { Id = 2, AssemblyName = "Assembly Line 2" },
+                  new Assembly { Id = 3, AssemblyName = "Assembly Line 3" }
+            };
         }
 
         private static void InitializeDevices()
@@ -35,10 +46,10 @@ namespace Plugins.InMemory
         {
             DbOperations = new List<Operation>
             {
-                new Operation { OperationId = 1, Name = "Scan Items", OrderInWhichToPerform = 1, ImageData = new byte[0], DeviceId = 1 },
-                new Operation { OperationId = 2, Name = "Print Labels", OrderInWhichToPerform = 2, ImageData = new byte[0], DeviceId = 2 },
-                new Operation { OperationId = 3, Name = "Capture Images", OrderInWhichToPerform = 3, ImageData = new byte[0], DeviceId = 3 },
-                new Operation { OperationId = 4, Name = "Organize Trays", OrderInWhichToPerform = 4, ImageData = new byte[0], DeviceId = 4 }
+                new Operation { OperationId = 1, OperationName = "Scan Items", OrderInWhichToPerform = 1, ImageData = new byte[0], DeviceId = 1, AssemblyId = 1 },
+                new Operation { OperationId = 2, OperationName = "Print Labels", OrderInWhichToPerform = 2, ImageData = new byte[0], DeviceId = 2, AssemblyId = 1 },
+                new Operation { OperationId = 3, OperationName = "Capture Images", OrderInWhichToPerform = 3, ImageData = new byte[0], DeviceId = 3, AssemblyId = 1 },
+                new Operation { OperationId = 4, OperationName = "Organize Trays", OrderInWhichToPerform = 4, ImageData = new byte[0], DeviceId = 4, AssemblyId = 1 }
             };
         }
 

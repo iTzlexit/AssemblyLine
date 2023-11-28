@@ -25,7 +25,7 @@ namespace ApplicationLayer.DTO
             return operations.Select(o => new OperationResponse
             {
                 OperationId = o.OperationId,
-                Name = o.Name,
+                Name = o.OperationName,
                 OrderInWhichToPerform = o.OrderInWhichToPerform,
                 ImageData = o.ImageData,
                 DeviceName = o.Device.Name 
