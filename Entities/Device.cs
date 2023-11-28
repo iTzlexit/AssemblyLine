@@ -19,9 +19,9 @@ namespace Entities
 
     public enum DeviceType
     {
-        BarcodeScanner,
-        Printer,
-        Camera,
-        SocketTray
+        BarcodeScanner =1,
+        Printer = 2,
+        Camera = 3,
+        SocketTray = 4, 
     }
 }

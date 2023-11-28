@@ -11,6 +11,8 @@ namespace ApplicationLayer.DTO
     {
         public int OperationId { get; set; }
         public string Name { get; set; } = string.Empty;
+
+        public int AssemblyId { get; set; }
         public int OrderInWhichToPerform { get; set; }
         public byte[] ImageData { get; set; } = new byte[0]; //store image of item being manufatured 
 

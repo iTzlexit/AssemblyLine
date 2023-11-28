@@ -4,16 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entities
+namespace ApplicationLayer.DTO
 {
-    /// <summary>
-    /// One to many relationship 1 Assembly to many Operations 
-    /// </summary>
-    public class Assembly 
+    public class AssemblyResponse
     {
         public int Id { get; set; }
         public string AssemblyName { get; set; } = string.Empty;
-        
-        public List<Operation> operations = new List<Operation>();
+        public List<OperationResponse> Operations { get; set; } = new List<OperationResponse>();
     }
 }

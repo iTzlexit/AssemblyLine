@@ -4,6 +4,7 @@ namespace AssemblyLine.ApplicationLayer.PluginInterfaces
 {
     public interface IDeviceRepository
     {
-        Task<DeviceResponse> AddDeviceAsync(DeviceAddRequest deviceAddRequest); 
+        Task<DeviceResponse> AddDeviceAsync(DeviceAddRequest deviceAddRequest);
+        Task<AssemblyOperationResponseForDevice> GetDeviceModalContent(int assemblyId); 
     }
 }

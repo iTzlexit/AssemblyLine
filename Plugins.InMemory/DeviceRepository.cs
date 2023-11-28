@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AssemblyLine.ApplicationLayer.PluginInterfaces;
+using Entities;
 
 namespace Plugins.InMemory
 {
@@ -65,7 +66,47 @@ namespace Plugins.InMemory
         }
 
 
+        //----------------------Fetching the assemblies and operations for add device modal and populate the operation based on assembly ---------//
+        // retrieve all the assemblies
+        // retrieve all the operations based on selected assembly // default assembly will be the first one created on list
+        // retrieve all the device type enums 
+        public async Task<AssemblyOperationResponseForDevice> GetDeviceModalContent(int assemblyId)
+        {
+            // Step 1: Retrieve all assemblies and their operations
+            var assemblies = MockDb.DbAssemblies.Select(a => new AssemblyResponse
+            {
+                Id = a.Id,
+                AssemblyName = a.AssemblyName,
+                Operations = a.operations.Select(o => new OperationResponse
+                {
+                    OperationId = o.OperationId,
+                    Name = o.OperationName,
+                
+                }).ToList()
+            }).ToList();
 
+            // Optionally filter the operations of each assembly if a specific assembly ID is provided
+            if (assemblyId != 0)
+            {
+                foreach (var assembly in assemblies)
+                {
+                    if (assembly.Id != assemblyId)
+                    {
+                        assembly.Operations.Clear();
+                    }
+                }
+            }
+
+            // Step 2: Retrieve all device type enums
+            var deviceTypes = Enum.GetNames(typeof(DeviceType)).ToList();
+
+            // Return the response
+            return await Task.FromResult(new AssemblyOperationResponseForDevice
+            {
+                Assemblies = assemblies,
+                DeviceTypes = deviceTypes
+            });
+        }
 
 
     }
