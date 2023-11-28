@@ -1,6 +1,9 @@
+using AssemblyLine.ApplicationLayer.PluginInterfaces;
 using AssemblyLine.Data;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Plugins.InMemory;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +11,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
+
+builder.Services.AddSingleton<IOperationRepository, OperationRepository>();
+
+
+//builder.Services.AddTransient<IGet>
+
+
+
+//----------Pipeline ----------------
+
 
 var app = builder.Build();
 

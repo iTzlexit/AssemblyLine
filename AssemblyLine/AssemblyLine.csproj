@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ApplicationLayer\ApplicationLayer.csproj" />
+    <ProjectReference Include="..\Plugins.InMemory\Plugins.InMemory.csproj" />
   </ItemGroup>
 
 </Project>
