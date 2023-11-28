@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ApplicationLayer\ApplicationLayer.csproj" />
-    <ProjectReference Include="..\ServiceContracts\ServiceContracts.csproj" />
   </ItemGroup>
 
 </Project>

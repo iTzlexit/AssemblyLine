@@ -9,7 +9,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Entities\Entities.csproj" />
     <ProjectReference Include="..\Plugins.InMemory\Plugins.InMemory.csproj" />
-    <ProjectReference Include="..\ServiceContracts\ServiceContracts.csproj" />
   </ItemGroup>
 
 </Project>
