@@ -11,8 +11,8 @@ namespace Plugins.InMemory
     {
 
 
-        public static List<Device> Devices { get; private set; }
-        public static List<Operation> Operations { get; private set; }
+        public static List<Device> DbDevices { get; private set; }
+        public static List<Operation> DbOperations { get; private set; }
 
         static MockDb()
         {
@@ -22,7 +22,7 @@ namespace Plugins.InMemory
 
         private static void InitializeDevices()
         {
-            Devices = new List<Device>
+            DbDevices = new List<Device>
             {
                 new Device { DeviceId = 1, Name = "Scanner 1", DeviceType = DeviceType.BarcodeScanner },
                 new Device { DeviceId = 2, Name = "Printer A", DeviceType = DeviceType.Printer },
@@ -33,7 +33,7 @@ namespace Plugins.InMemory
 
         private static void InitializeOperations()
         {
-            Operations = new List<Operation>
+            DbOperations = new List<Operation>
             {
                 new Operation { OperationId = 1, Name = "Scan Items", OrderInWhichToPerform = 1, ImageData = new byte[0], DeviceId = 1 },
                 new Operation { OperationId = 2, Name = "Print Labels", OrderInWhichToPerform = 2, ImageData = new byte[0], DeviceId = 2 },
