@@ -1,4 +1,4 @@
-﻿.operation-img {
+﻿/*.operation-img {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -10,7 +10,17 @@
     margin: 0.1rem;
     object-fit: cover;
 }
+*/
 
+
+
+td {
+    padding: 0.8rem 0.9rem;
+    font-weight: 500;
+    font-size: 1.1rem;
+    font-family: Rubik;
+    vertical-align: middle; /* Add this line */
+}
 
 
 .icon {
@@ -20,11 +30,11 @@
 
 .delete-button {
     padding: 0.2rem 0.5rem;
-
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     border-radius: 5px;
     cursor: pointer;
     font-size: 1.2rem;
-    background-color: #adb5bd;
+    background-color: #fff;
 }
 
 

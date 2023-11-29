@@ -7,7 +7,7 @@
 @foreach (var op in Operations)
 {
     <tr class=""></tr>
-    <tr class="  ">
+    <tr class=" ">
 
         <td class=""></td>
         <td class="">@op.OrderInWhichToPerform</td>
@@ -39,7 +39,7 @@
     public EventCallback Refresh { get; set; }
 
 
-    private string confirmMessage = "Are you sure you want to delete the customer \"{0}\"?";
+    private string confirmMessage = "Are you sure you want to delete the operation \"{0}\"?";
     private bool ConfirmResult { get; set; }
 
 

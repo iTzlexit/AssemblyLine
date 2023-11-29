@@ -2,43 +2,64 @@
 @using ApplicationLayer.DTO
 
 
-<div class="mb-3 px-2 py-4 d-flex justify-content-center  ">
 
-    <h1 class="display-4">Operations</h1>
+<div class="page-container">
 
-</div>
+    <div class="btn-table-container  ">
 
+        <div class="top-section mb-3 gap-3">
+            <button class="btn-operation d-flex align-items-center justify-content-center gap-3">
+                <i class="fa-solid fa-plus add-icon"></i>
+                <span>Add Operation</span>
+            </button>
 
-<div class="d-flex justify-content-center">
-    <div class="table-container">
-        <div class="table-responsive ">
-            <table class="table table-hover  ">
-                <thead class=" ">
-                    <tr class="table-head text-white">
-                        <th class=" text-nowrap">Image</th>
-                        <th class=" text-nowrap">Order</th>
-                        <th class=" text-nowrap">Operation</th>
-                        <th class=" text-nowrap">Device Name</th>
-                        <th class=" text-nowrap">Device Type</th>
-                        <th class=" text-nowrap">Actions</th>
+            <button class="btn-device d-flex align-items-center justify-content-center gap-3">
+                <i class="fa-solid fa-plus add-icon"></i>
+                <span>Add Device</span>
+            </button>
+        </div>
 
 
-                    </tr>
-                </thead>
-                <tbody>
+        <div class="">
 
 
 
-                    <OperationListItemComponent Refresh="RefreshData" Operations="Operations"></OperationListItemComponent>
 
-                </tbody>
-            </table>
+            <div class="table-container">
+                <div class="table-responsive ">
+                    <table class="table table-hover  ">
+                        <thead class=" ">
+                            <tr class="table-head text-white">
+                                <th class=" text-nowrap">Image</th>
+                                <th class=" text-nowrap">Order</th>
+                                <th class=" text-nowrap">Operation</th>
+                                <th class=" text-nowrap">Device Name</th>
+                                <th class=" text-nowrap">Device Type</th>
+                                <th class=" text-nowrap">Actions</th>
 
 
+                            </tr>
+                        </thead>
+                        <tbody>
+
+
+
+                            <OperationListItemComponent Refresh="RefreshData" Operations="Operations"></OperationListItemComponent>
+
+                        </tbody>
+                    </table>
+
+
+                </div>
+
+            </div>
         </div>
 
     </div>
+
 </div>
+
+
 
 
 @code 
