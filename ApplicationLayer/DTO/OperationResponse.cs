@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ApplicationLayer.DTO
+namespace AssemblyLine.ApplicationLayer.DTO
 {
     public class OperationResponse
     {
@@ -16,7 +16,9 @@ namespace ApplicationLayer.DTO
         public int OrderInWhichToPerform { get; set; }
         public byte[] ImageData { get; set; } = new byte[0]; //store image of item being manufatured 
 
-        public string DeviceName { get; set; } = string.Empty; 
+        public string DeviceName { get; set; } = string.Empty;
+
+        public string DeviceType { get; set; } = string.Empty; 
 
     }
 
@@ -30,7 +32,8 @@ namespace ApplicationLayer.DTO
                 Name = o.OperationName,
                 OrderInWhichToPerform = o.OrderInWhichToPerform,
                 ImageData = o.ImageData,
-                DeviceName = o.Device.Name 
+                DeviceName = o.Device.Name,
+                DeviceType =  o.Device.DeviceType.ToString(),
             }).ToList();
 
         }

@@ -1,0 +1,61 @@
+﻿@inject IGetListOfOperationsUseCase _getListOfOperationsUseCase
+@using ApplicationLayer.DTO
+
+
+<div class="mb-3 px-2 py-4 d-flex justify-content-center  ">
+
+    <h1 class="display-4">Operations</h1>
+
+</div>
+
+
+<div class="d-flex justify-content-center">
+    <div class="table-container">
+        <div class="table-responsive ">
+            <table class="table table-hover  ">
+                <thead class=" ">
+                    <tr class="table-head text-white">
+                        <th class=" text-nowrap">Image</th>
+                        <th class=" text-nowrap">Order</th>
+                        <th class=" text-nowrap">Operation</th>
+                        <th class=" text-nowrap">Device Name</th>
+                        <th class=" text-nowrap">Device Type</th>
+                        <th class=" text-nowrap">Actions</th>
+
+
+                    </tr>
+                </thead>
+                <tbody>
+
+
+
+                    <OperationListItemComponent Refresh="RefreshData" Operations="Operations"></OperationListItemComponent>
+
+                </tbody>
+            </table>
+
+
+        </div>
+
+    </div>
+</div>
+
+
+@code 
+{
+
+    //For the grid
+    public List<OperationResponse> Operations { get; set; } = new List<OperationResponse>();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await RefreshData();
+    }
+
+    private async Task RefreshData()
+    {
+        Operations = (await _getListOfOperationsUseCase.ExecuteAsync()).ToList(); 
+
+    }
+}

@@ -1,62 +1,192 @@
-.navbar-toggler {
-    background-color: rgba(255, 255, 255, 0.1);
+
+
+.nav-container-2 {
+    width: 100%;
+    background-color: #F8F9FA;
+    color: #343a40;
+    border-radius: 10px;
+    box-shadow: 0 3px 8px grey, 0 7px 8px rgba(0, 0, 0, 0.15);
+    align-items: center;
+    justify-items: center;
 }
 
-.top-row {
-    height: 3.5rem;
-    background-color: rgba(0,0,0,0.4);
+.nav-container {
+    display: flex;
+    gap: 0.2rem;
+    flex-direction: column;
+    justify-content: flex-start;
+    
+
+    margin-top: 7rem; 
 }
 
-.navbar-brand {
-    font-size: 1.1rem;
-}
-
-.oi {
-    width: 2rem;
-    font-size: 1.1rem;
-    vertical-align: text-top;
-    top: -2px;
-}
 
 .nav-item {
-    font-size: 0.9rem;
-    padding-bottom: 0.5rem;
+    width: 100%;
 }
 
-    .nav-item:first-of-type {
-        padding-top: 1rem;
-    }
-
-    .nav-item:last-of-type {
-        padding-bottom: 1rem;
-    }
-
-    .nav-item ::deep a {
-        color: #d7d7d7;
-        border-radius: 4px;
-        height: 3rem;
-        display: flex;
-        align-items: center;
-        line-height: 3rem;
-    }
-
-.nav-item ::deep a.active {
-    background-color: rgba(255,255,255,0.25);
-    color: white;
+.nav-link, .nav-link-active {
+    display: flex;
+    justify-items: center;
 }
 
-.nav-item ::deep a:hover {
-    background-color: rgba(255,255,255,0.1);
-    color: white;
+.nav-link {
+    gap: 14px;
 }
 
-@media (min-width: 641px) {
-    .navbar-toggler {
-        display: none;
+.nav-link-active {
+    gap: 18px;
+    border-right: 3px solid #44465f;
+    background-color: #dee2e6; 
+    color: blue; 
+}
+
+    .nav-link-active .icon {
+        color: #44465f; 
     }
 
-    .collapse {
-        /* Never collapse the sidebar for wide screens */
-        display: block;
+    .nav-link-active .nav-link-text {
+        color: #77788d; 
     }
+
+
+.nav-link-text {
+    color: #495057;
 }
+
+
+.nav-link:hover, .nav-link:active {
+    transform: translateY(-1px);
+    background-color: #44465f;
+}
+
+.nav-link-common:hover .icon {
+    color: #77788d;
+}
+
+.nav-link-common {
+    display: flex;
+    justify-items: end;
+    align-items: center;
+    gap: 1.6rem;
+    text-decoration: none;
+    font-size: 11px;
+    font-family: Rubik;
+    font-weight: 600;
+    color: #495057;
+    transition: all 0.2s ease-in-out;
+    padding: 10px;
+    height: 100%;
+    width: 100%; /* Ensure it spans the full width */
+    box-sizing: border-box; /* Include padding in the element's total width */
+    border-top-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+.nav-link {
+    display: flex;
+    justify-items: center;
+    gap: 14px;
+}
+
+
+.nav-link-active {
+    display: flex;
+    justify-items: center;
+    gap: 18px;
+}
+
+    .nav-link-active:link,
+    .nav-link-active:visited {
+        text-decoration: none;
+        font-weight: 700;
+        color: #343a40;
+        transition: all 0.2s ease-in-out;
+        border-right: 4px solid #0b7285;
+        background-color: #f1f3f5;
+    }
+
+
+    .nav-link-active:active {
+        color: #343a40;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+        /*  border-right: 7px solid #087f5b;*/
+    }
+
+
+.nav-link:link,
+.nav-link:visited {
+    text-decoration: none;
+    font-weight: 700;
+    color: #343a40;
+    transition: all 0.2s ease-in-out;
+}
+
+.nav-link:hover,
+.nav-link:active {
+    color: #343a40;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.hello {
+    display: flex;
+    justify-content: center;
+}
+
+.icon {
+    color: #495057;
+    font-size: 15px;
+}
+
+.tab-icon {
+    display: flex;
+    justify-items: center;
+    align-items: center;
+}
+
+.nav-link-submenu-toggle {
+    cursor: pointer;
+}
+
+.sub-nav {
+    overflow: hidden;
+    max-height: 35px;
+    transition: max-height 0.3s ease-out; /* Changed from 0.3s to 0.5s */
+}
+
+
+.sub-nav-collapse {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-in;
+}
+
+
+.sub-nav-text {
+    padding-left: 25px;
+}
+/* ... your other styles ... */
+.nav-link-common:hover {
+    background-color: #ffff;
+    color: black;
+    cursor: pointer;
+    border-top-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+
+
+.nav-link-submenu-toggle, .nav-link-submenu-toggle-active {
+    position: absolute;
+    right: 10px;
+}
+
+    .nav-link-submenu-toggle i.fa-chevron-right {
+        transform: rotate(0deg); /* Points right when the submenu is closed */
+    }
+
+    .nav-link-submenu-toggle-active i.fa-chevron-right {
+        transform: rotate(90deg); /* Points down when the submenu is open */
+    }

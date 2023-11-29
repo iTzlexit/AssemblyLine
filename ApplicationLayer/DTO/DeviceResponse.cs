@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ApplicationLayer.DTO
+namespace AssemblyLine.ApplicationLayer.DTO
 {
     public class DeviceResponse
     {

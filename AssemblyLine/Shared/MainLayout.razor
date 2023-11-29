@@ -1,19 +1,25 @@
 ﻿@inherits LayoutComponentBase
 
-<PageTitle>AssemblyLine</PageTitle>
+<PageTitle>IFS</PageTitle>
 
 <div class="page">
-    <div class="sidebar">
+
+    <div class="nav">
         <NavMenu />
     </div>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+
+    <menu class="menu-container">
+    </menu>
+
+    <section class="scrollable-article  ">
+        <div class=" container-article">
+
+            @Body
         </div>
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
+
+    </section>
+
+
 </div>

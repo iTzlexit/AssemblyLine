@@ -1,0 +1,59 @@
+﻿
+
+
+
+.icon {
+    color: #fff;
+}
+
+.table-container {
+    width: 60%;
+    margin: auto 0; 
+}
+
+.add-customer {
+    background-color: #0ca678;
+}
+
+
+.table-head {
+    background-color: #075e6f
+}
+
+.table thead tr th {
+    padding: 1.2rem 0.9rem 1.2rem 0.9rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    font-family: Dubai;
+    letter-spacing: 0.8px;
+    color: #ffffff;
+}
+
+.yy {
+    padding: 2rem 2rem;
+}
+
+.table-responsive {
+    border-radius: 0.6rem;
+}
+
+.table {
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+tbody {
+    font-family: Rubik;
+    letter-spacing: 0.23px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: black;
+}
+
+
+
+
+
+
+.search {
+    width: 20%;
+}

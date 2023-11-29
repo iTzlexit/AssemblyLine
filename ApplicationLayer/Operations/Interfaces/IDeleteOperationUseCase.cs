@@ -1,6 +1,6 @@
-﻿using ApplicationLayer.DTO;
+﻿using AssemblyLine.ApplicationLayer.DTO;
 
-namespace ApplicationLayer.Operations.Interfaces
+namespace AssemblyLine.ApplicationLayer.Operations.Interfaces
 {
     public interface IDeleteOperationUseCase
     {

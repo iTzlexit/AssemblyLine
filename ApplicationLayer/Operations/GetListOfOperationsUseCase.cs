@@ -1,5 +1,5 @@
-﻿using ApplicationLayer.DTO;
-using ApplicationLayer.Operations.Interfaces;
+﻿using AssemblyLine.ApplicationLayer.DTO;
+
 using AssemblyLine.ApplicationLayer.PluginInterfaces;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ApplicationLayer.Operations
+namespace AssemblyLine.ApplicationLayer.Operations.Interfaces
 {
     public class GetListOfOperationsUseCase : IGetListOfOperationsUseCase
     {
@@ -21,7 +21,9 @@ namespace ApplicationLayer.Operations
 
         public async Task<IEnumerable<OperationResponse>> ExecuteAsync()
         {
-            return await _operationRepository.GetOperationsAsync();
+            var response = await _operationRepository.GetOperationsAsync();
+
+            return response;    
         }
     }
 }

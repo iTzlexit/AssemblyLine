@@ -1,4 +1,4 @@
-﻿using ApplicationLayer.DTO;
+﻿using AssemblyLine.ApplicationLayer.DTO;
 
 namespace AssemblyLine.ApplicationLayer.PluginInterfaces
 {

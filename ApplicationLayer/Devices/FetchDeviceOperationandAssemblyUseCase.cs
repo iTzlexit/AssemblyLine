@@ -1,4 +1,5 @@
-﻿using ApplicationLayer.DTO;
+﻿using ApplicationLayer.Devices.Interfaces;
+using AssemblyLine.ApplicationLayer.DTO;
 using AssemblyLine.ApplicationLayer.PluginInterfaces;
 using System;
 using System.Collections.Generic;
@@ -6,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ApplicationLayer.Devices
+namespace AssemblyLine.ApplicationLayer.Devices.Interfaces
 {
-    public class FetchDeviceOperationandAssemblyUseCase
+    public class FetchDeviceOperationandAssemblyUseCase: IFetchDeviceOperationandAssemblyUseCase
     {
         private readonly IDeviceRepository _deviceRepository;
 
@@ -19,7 +20,9 @@ namespace ApplicationLayer.Devices
 
         public async Task<AssemblyOperationResponseForDevice> FetchDeviceModalContent(int selectedAssembly) 
         {
-            return await _deviceRepository.GetDeviceModalContent(selectedAssembly);
+            var response = await _deviceRepository.GetDeviceModalContent(selectedAssembly);
+
+            return response;
         }
     }
 }

@@ -1,10 +1,11 @@
-﻿using System;
+﻿using AssemblyLine.ApplicationLayer.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ApplicationLayer.DTO
+namespace AssemblyLine.ApplicationLayer.DTO
 {
     public class AssemblyResponse
     {

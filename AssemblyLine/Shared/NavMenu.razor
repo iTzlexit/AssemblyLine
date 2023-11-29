@@ -1,33 +1,128 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">AssemblyLine</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+﻿@inject NavigationManager NavigationManager
+
+
+
+<nav class="nav-container-2">
+
+
+    <div class="nav-container">
+
+        <div class="nav-item">
+            <a class="@NavLinkCssClass(HomePageUri) tab-icon" href="@HomePageUri">
+                <i class="fa-solid fa-arrows-to-dot icon"></i>
+                <span class="nav-link-text">Operations</span>
+            </a>
+        </div>
+       
+
+        <div class="nav-item">
+            <a class="@NavLinkCssClass(ProductPageUri)" href="@ProductPageUri">
+                <i class="fa-solid fa-face-smile icon"></i>
+                <span class="nav-link-text">Other</span>
+            </a>
+        </div>
+
+
     </div>
-</div>
+</nav>
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="oi oi-plus" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
-            </NavLink>
-        </div>
-    </nav>
-</div>
 
-@code {
+
+
+
+@code
+{
+    // Public and CamelCase because C# properties are methods.
+
+
+    private const string HomePageUri = "/";
+   
+    private const string ProductPageUri = "/products";
+  
+
+
+
+
+
+
+
+
+    private string NavLinkCssClass(string uri)
+    {
+        return $"{(IsActive(uri) ? "nav-link-active" : "nav-link")} nav-link-common"; // if active then return the active css class and if not call the nav-link class but always return the common
+
+    }
+
+    protected override void OnInitialized()
+    {
+        NavigationManager.LocationChanged += OnLocationChanged; //registering or binding the event handler(OnLocationChanged) to the event(location Changed) // its like @onclick = "HandleButtonClicked"
+    }
+
+ 
+    // Define the event handler
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        // Do something in response to the LocationChanged event
+        StateHasChanged(); // trigger a re-render of the component
+    }
+
+    // Unregister the event handler when navigates outside the page to prevent memory leaks and improve performance.
+    public void Dispose()
+    {
+        NavigationManager.LocationChanged -= OnLocationChanged;
+    }
+
+
+    //determining if a page is currently active
+
+    private bool IsActive(string uri)
+    {
+        var currentUri = NavigationManager.Uri;
+        var baseUri = NavigationManager.BaseUri; //https://localhost:7170/
+
+        // Remove the base URI to get the relative path
+        var currentRelativeUri = currentUri.Replace(baseUri, "").Trim('/'); // would be stockEntry/Customers
+
+        if (uri == HomePageUri)
+        {
+            if (string.IsNullOrEmpty(currentRelativeUri))
+            {
+                return true;
+            }
+        }
+        else
+        {
+            // Remove the leading '/' and compare with the current relative URI
+            if (uri.TrimStart('/') == currentRelativeUri) // remove the slash and if its = to the currentrelative ui then return true which is active
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*@code {
     private bool collapseNavMenu = true;
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
@@ -37,3 +132,4 @@
         collapseNavMenu = !collapseNavMenu;
     }
 }
+*@

@@ -1,0 +1,65 @@
+﻿@using AssemblyLine.ApplicationLayer.DTO
+@inject IDeleteOperationUseCase _deleteOperationUseCase
+@inject IJSRuntime _JSRuntime;
+
+
+
+@foreach (var op in Operations)
+{
+    <tr class=""></tr>
+    <tr class="  ">
+
+        <td class=""></td>
+        <td class="">@op.OrderInWhichToPerform</td>
+        <td class="">@op.Name</td>
+        <td class="">@op.DeviceName</td>
+        <td class="">@op.DeviceType</td>
+        <td class="cell">
+            <button class="delete-button" @onclick="() => DeleteOperation(op.OperationId, op.Name)">
+                <i class="fa-solid fa-trash icon"></i>
+            </button>
+
+        </td>
+
+
+
+
+    </tr>
+}
+
+
+
+
+
+
+@code {
+    [Parameter]
+    public List<OperationResponse> Operations { get; set; } = new List<OperationResponse>();
+    [Parameter]
+    public EventCallback Refresh { get; set; }
+
+
+    private string confirmMessage = "Are you sure you want to delete the customer \"{0}\"?";
+    private bool ConfirmResult { get; set; }
+
+
+
+    protected async Task DeleteOperation(int operationId, string operationName)
+    {
+        ConfirmResult = await _JSRuntime.InvokeAsync<bool>("confirm", string.Format(confirmMessage, operationName)); // type
+
+        if (ConfirmResult)
+        {
+
+            await _deleteOperationUseCase.ExecuteAsync(operationId);
+            await Refresh.InvokeAsync(); // Refreshing the list
+
+        }
+        else
+        {
+            return;
+        }
+
+
+    }
+}

@@ -1,8 +1,12 @@
+using ApplicationLayer.Devices;
+using AssemblyLine.ApplicationLayer.Operations.Interfaces; 
+using ApplicationLayer.Devices.Interfaces;
 using AssemblyLine.ApplicationLayer.PluginInterfaces;
 using AssemblyLine.Data;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Plugins.InMemory;
+using AssemblyLine.ApplicationLayer.Devices.Interfaces;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,10 +20,15 @@ builder.Services.AddSingleton<IOperationRepository, OperationRepository>();
 builder.Services.AddSingleton<IDeviceRepository, DeviceRepository>();
 
 
-//use cases 
-//builder.Services.AddTransient<IGet>
+//Device use cases 
+builder.Services.AddTransient<IAddDeviceUseCase, AddDeviceUseCase>(); 
+builder.Services.AddTransient<IFetchDeviceOperationandAssemblyUseCase, FetchDeviceOperationandAssemblyUseCase>(); 
 
+//Operations Use Cases
 
+builder.Services.AddTransient<IAddOperationUseCase, AddOperationUseCase>();
+builder.Services.AddTransient<IDeleteOperationUseCase, DeleteOperationUseCase>();
+builder.Services.AddTransient<IGetListOfOperationsUseCase, GetListOfOperationsUseCase>();
 
 //----------Pipeline ----------------
 

@@ -1,5 +1,5 @@
-﻿using ApplicationLayer.DTO;
-using ApplicationLayer.Operations;
+﻿using AssemblyLine.ApplicationLayer.DTO;
+
 using AssemblyLine.ApplicationLayer.PluginInterfaces;
 using Entities;
 using System;
@@ -13,15 +13,28 @@ namespace Plugins.InMemory
     /// </summary>
     public class OperationRepository : IOperationRepository
     {
-       
 
-        public async Task <IEnumerable<OperationResponse>> GetOperationsAsync()
+        public async Task<IEnumerable<OperationResponse>> GetOperationsAsync() // assign assembly id number in order to filter it accordingly to assembly 
         {
-            IEnumerable<Operation> operations = MockDb.DbOperations;
+            var operations = MockDb.DbOperations.OrderBy(o => o.OrderInWhichToPerform);
+            var response = new List<OperationResponse>();
 
-            // coverting to DTO
-            IEnumerable<OperationResponse> response = operations.ToOperationResponse();
+            foreach (var operation in operations)
+            {
+                var device = MockDb.DbDevices.FirstOrDefault(d => d.DeviceId == operation.DeviceId); 
 
+                var operationResponse = new OperationResponse
+                {
+                    OperationId = operation.OperationId,
+                    Name = operation.OperationName,
+                    OrderInWhichToPerform = operation.OrderInWhichToPerform,
+                    ImageData = operation.ImageData,
+                    DeviceName = device?.Name ?? "NA",
+                    DeviceType = device?.DeviceType.ToString() ?? "NA"
+                };
+
+                response.Add(operationResponse);
+            }
 
             return await Task.FromResult(response);
         }

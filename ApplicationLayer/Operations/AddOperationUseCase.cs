@@ -1,4 +1,5 @@
-﻿using ApplicationLayer.DTO;
+﻿using AssemblyLine.ApplicationLayer.DTO;
+
 using AssemblyLine.ApplicationLayer.PluginInterfaces;
 using Entities;
 using System;
@@ -7,9 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ApplicationLayer.Operations
+namespace AssemblyLine.ApplicationLayer.Operations.Interfaces
 {
-    public class AddOperationUseCase
+    public class AddOperationUseCase: IAddOperationUseCase
     {
         private readonly IOperationRepository _operationRepository;
 

@@ -1,4 +1,5 @@
-﻿using ApplicationLayer.DTO;
+﻿using ApplicationLayer.Devices.Interfaces;
+using AssemblyLine.ApplicationLayer.DTO;
 using AssemblyLine.ApplicationLayer.PluginInterfaces;
 using System;
 using System.Collections.Generic;
@@ -6,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ApplicationLayer.Devices
+namespace AssemblyLine.ApplicationLayer.Devices.Interfaces
 {
-    public class AddDeviceUseCase
+    public class AddDeviceUseCase: IAddDeviceUseCase
     {
         private readonly IDeviceRepository _deviceRepository;
 
