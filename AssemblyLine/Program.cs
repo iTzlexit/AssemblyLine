@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Plugins.InMemory;
 using AssemblyLine.ApplicationLayer.Devices.Interfaces;
+using ApplicationLayer.Assembly;
+using AssemblyLine.ApplicationLayer.Assembly.Interface;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +20,7 @@ builder.Services.AddSingleton<WeatherForecastService>();
 
 builder.Services.AddSingleton<IOperationRepository, OperationRepository>();
 builder.Services.AddSingleton<IDeviceRepository, DeviceRepository>();
+builder.Services.AddSingleton<IAssemblyRepository, AssemblyRepository>();
 
 
 //Device use cases 
@@ -29,6 +32,7 @@ builder.Services.AddTransient<IFetchDeviceOperationandAssemblyUseCase, FetchDevi
 builder.Services.AddTransient<IAddOperationUseCase, AddOperationUseCase>();
 builder.Services.AddTransient<IDeleteOperationUseCase, DeleteOperationUseCase>();
 builder.Services.AddTransient<IGetListOfOperationsUseCase, GetListOfOperationsUseCase>();
+builder.Services.AddTransient<IFetchAssembliesUseCase, FetchAssembliesUseCase>(); 
 
 //----------Pipeline ----------------
 

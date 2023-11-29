@@ -29,6 +29,15 @@ html {
 
 /*------------------------------Inputs and Select tag -----------------------*/
 
+.filter-select-assembly {
+    width: 27rem;
+    border: none;
+    padding: 0.3rem;
+    font-size: 1rem;
+    background-color: #fff;
+    box-shadow: 0 1px 2px rgb(0, 0, 0, 0.2);
+}
+
 input, .general-select {
     padding: 1.1rem;
     font-size: 1rem;
@@ -64,7 +73,7 @@ input, .general-select {
     }
 
 
-    .general-select:focus, .general-input:focus, .general-option:focus, {
+    .general-select:focus, .general-input:focus, .general-option:focus{
         outline: none;
         box-shadow: 0 0 0 0.3rem rgba(190, 189, 189, 0.722);
     }

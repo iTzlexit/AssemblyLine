@@ -9,7 +9,7 @@ namespace Plugins.InMemory
 {
     public static class MockDb
     {
-        public static List<Assembly> DbAssemblies { get; set; }
+        public static List<Assemblies> DbAssemblies { get; set; }
         public static List<Operation> DbOperations { get; private set; }
         public static List<Device> DbDevices { get; private set; }
 
@@ -23,11 +23,11 @@ namespace Plugins.InMemory
         private static void InitializeAssemblies()
         {
 
-            DbAssemblies = new List<Assembly>
+            DbAssemblies = new List<Assemblies>
             {
-                  new Assembly { Id = 1, AssemblyName = "Assembly Line 1" },
-                  new Assembly { Id = 2, AssemblyName = "Assembly Line 2" },
-                  new Assembly { Id = 3, AssemblyName = "Assembly Line 3" }
+                  new Assemblies { Id = 1, AssemblyName = "Assembly Line 1" },
+                  new  Assemblies { Id = 2, AssemblyName = "Assembly Line 2" },
+                  new Assemblies { Id = 3, AssemblyName = "Assembly Line 3" }
             };
         }
 

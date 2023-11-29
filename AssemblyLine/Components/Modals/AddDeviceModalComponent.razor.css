@@ -1,0 +1,89 @@
+﻿.modal {
+    padding: 3rem;
+   
+}
+
+.modal-content {
+    border-radius: 5px;
+
+}
+
+.modal-header {
+    background-color: #5f3dc4;
+    color: #fff;
+}
+
+
+
+
+.modal-body {
+    background-color: #fff;
+    box-shadow: 3px 3px 1px rgba(0, 0, 0, 0.2);
+    padding: 3rem;
+    margin: 1rem 1rem;
+    border-radius: 5px;
+}
+
+
+
+/*modal ----------------------- x button */
+.custom-close-btn {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    width: 2rem;
+    height: 2rem;
+    position: relative;
+}
+
+    .custom-close-btn::before, .custom-close-btn::after {
+        content: '';
+        position: absolute;
+        width: 2px;
+        height: 20px;
+        background-color: white;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(45deg);
+    }
+
+    .custom-close-btn::after {
+        transform: translate(-50%, -50%) rotate(-45deg);
+    }
+
+    .custom-close-btn:hover::before, .custom-close-btn:hover::after {
+        background-color: white;
+    }
+
+    .custom-close-btn:hover {
+        border-radius: 50%;
+        box-shadow: 0 0 0 2px white;
+    }
+
+/*Modal footer buttons --------------------------------------*/
+
+.btn-submit, .btn-closer {
+    padding: 0.6rem 0.8rem; /* Slightly more horizontal padding */
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    color: #fff;
+    width: 5rem;
+}
+
+.btn-submit {
+    background-color: #1971c2;
+}
+
+
+.btn-closer {
+    background-color: #f03e3e;
+}
+
+.modal-footer-custom {
+    display: flex;
+    background-color: #fff;
+    gap:1rem;
+    padding: 0.2rem;
+    margin: 0.7rem 1rem;
+    border-radius: 5px;
+}

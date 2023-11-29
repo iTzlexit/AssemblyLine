@@ -8,17 +8,19 @@
     <div class="btn-table-container  ">
 
         <div class="top-section mb-3 gap-3">
-            <button class="btn-operation d-flex align-items-center justify-content-center gap-3">
+            <button @onclick="() => ShowAddOperationModal() " class="btn-operation d-flex align-items-center justify-content-center gap-3">
                 <i class="fa-solid fa-plus add-icon"></i>
                 <span>Add Operation</span>
             </button>
 
-            <button class="btn-device d-flex align-items-center justify-content-center gap-3">
+            <button @onclick="() => ShowAddDeviceModal()" class="btn-device d-flex align-items-center justify-content-center gap-3">
                 <i class="fa-solid fa-plus add-icon"></i>
                 <span>Add Device</span>
             </button>
-        </div>
 
+
+        </div>
+       
 
         <div class="">
 
@@ -41,9 +43,6 @@
                             </tr>
                         </thead>
                         <tbody>
-
-
-
                             <OperationListItemComponent Refresh="RefreshData" Operations="Operations"></OperationListItemComponent>
 
                         </tbody>
@@ -59,7 +58,15 @@
 
 </div>
 
+@if(_showAddDeviceModalWindow == true)
+{
+    <AddDeviceModalComponent  ParentMethodToCallOnClickBtnClose="() => _showAddDeviceModalWindow = false"></AddDeviceModalComponent>
+}
 
+@if(_showAddOperationModalWindow == true)
+{
+    <AddOperationModalComponent ParentMethodToCallOnClickBtnClose="() => _showAddOperationModalWindow = false"></AddOperationModalComponent>
+}
 
 
 @code 
@@ -67,6 +74,22 @@
 
     //For the grid
     public List<OperationResponse> Operations { get; set; } = new List<OperationResponse>();
+    public int? SelectedAssembly { get; set; }
+
+    private bool _showAddDeviceModalWindow = false;
+    private bool _showAddOperationModalWindow = false;
+
+    private void ShowAddDeviceModal()
+    {
+        _showAddDeviceModalWindow = !_showAddDeviceModalWindow;
+        StateHasChanged();
+    }
+
+    private void ShowAddOperationModal()
+    {
+        _showAddOperationModalWindow = !_showAddOperationModalWindow; 
+        StateHasChanged(); 
+    }
 
 
     protected override async Task OnInitializedAsync()
@@ -78,5 +101,12 @@
     {
         Operations = (await _getListOfOperationsUseCase.ExecuteAsync()).ToList(); 
 
+    }
+
+
+    private async void SelectAssembly(ChangeEventArgs e)
+    {
+        SelectedAssembly = Convert.ToInt32(e.Value);
+        await RefreshData();
     }
 }
