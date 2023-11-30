@@ -1,7 +1,8 @@
-﻿@inject IFetchAssembliesUseCase _fetchAssembliesUseCase
+﻿@inject IFetchAssemblyWithDefaultOrderNumber _fetchAssemblyWithDefaultOrderNumber
 @inject IAddOperationUseCase _addOperationUseCase
 
-@using AssemblyLine.ApplicationLayer.Assembly.Interface
+@using ApplicationLayer.Assembly.Interface
+
 @using AssemblyLine.ApplicationLayer.DTO
 
 
@@ -29,7 +30,7 @@
 
                         <div>
                             <label for="assembly"> Select an assembly</label>
-                            <select id="assembly" class="general-select" @onchange= "SelectAssemblyChange">
+                                <select id="assembly" class="general-select" @onchange="SelectAssemblyChange">
                                 <option value="0" class="general-input">---------Select----------</option>
                                 @foreach (var assem in assemblyResponse)
                                 {
@@ -123,7 +124,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        assemblyResponse = (await _fetchAssembliesUseCase.ExecuteAsync()).ToList(); 
+        assemblyResponse = (await _fetchAssemblyWithDefaultOrderNumber.ExecuteAsync(operationAddRequest.AssemblyId)).ToList();
         ShowModal();
     }
 
@@ -131,8 +132,19 @@
     private void SelectAssemblyChange(ChangeEventArgs changeEventArgs)
     {
         AssemblyId = Convert.ToInt32(changeEventArgs.Value);
-        operationAddRequest.AssemblyId = AssemblyId; 
+        operationAddRequest.AssemblyId = AssemblyId;
+
+        var selectedAssembly = assemblyResponse.FirstOrDefault(a => a.Id == AssemblyId);
+        if (selectedAssembly != null)
+        {
+            operationAddRequest.OrderInWhichToPerform = selectedAssembly.DefaultOrderNumber;
+        }
+        else
+        {
+            operationAddRequest.OrderInWhichToPerform = 0; // Or any default value for non-selected assemblies
+        }
     }
+
 
     private async Task SubmitHandler()
     {

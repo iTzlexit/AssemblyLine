@@ -105,3 +105,16 @@ tbody {
         border: none;
         border-radius: 0.5rem;
     }
+
+
+.btn-submit{
+    padding: 0.6rem 0.8rem; /* Slightly more horizontal padding */
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    color: #fff;
+    width: 5rem;
+}
+
+.btn-submit {
+    background-color: #1971c2;
+}

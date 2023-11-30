@@ -12,6 +12,8 @@ namespace AssemblyLine.ApplicationLayer.DTO
     {
         public int Id { get; set; }
         public string AssemblyName { get; set; } = string.Empty;
+
+        public int DefaultOrderNumber { get; set; } 
         public List<OperationResponse> Operations { get; set; } = new List<OperationResponse>();
     }
 
@@ -36,5 +38,25 @@ namespace AssemblyLine.ApplicationLayer.DTO
 
             return assemblyResponses.ToList();
         }
+
+        public static IEnumerable<AssemblyResponse> ToAssemblywithDefaultOrderNumber(this IEnumerable<Assemblies> assemblies)
+        {
+            var assemblyResponses = new List<AssemblyResponse>();
+            foreach (Assemblies assembly in assemblies)
+            {
+                var response = new AssemblyResponse
+                {
+                    Id = assembly.Id,
+                    AssemblyName = assembly.AssemblyName
+                    // Removed the logic for calculating DefaultOrderNumber
+                };
+
+                assemblyResponses.Add(response);
+            }
+
+            return assemblyResponses.ToList();
+        }
+
+
     }
 }

@@ -1,15 +1,12 @@
-
 using AssemblyLine.ApplicationLayer.Operations.Interfaces; 
-
 using AssemblyLine.ApplicationLayer.PluginInterfaces;
 using AssemblyLine.Data;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 using Plugins.InMemory;
 using AssemblyLine.ApplicationLayer.Devices.Interfaces;
 using ApplicationLayer.Assembly;
 using AssemblyLine.ApplicationLayer.Assembly.Interface;
 using AssemblyLine.ApplicationLayer.Devices;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,6 +31,7 @@ builder.Services.AddTransient<IAddOperationUseCase, AddOperationUseCase>();
 builder.Services.AddTransient<IDeleteOperationUseCase, DeleteOperationUseCase>();
 builder.Services.AddTransient<IGetListOfOperationsUseCase, GetListOfOperationsUseCase>();
 builder.Services.AddTransient<IFetchAssembliesUseCase, FetchAssembliesUseCase>(); 
+builder.Services.AddTransient<IFetchAssemblyWithDefaultOrderNumber, FetchAssemblyWithDefaultOrderNumber>(); 
 
 //----------Pipeline ----------------
 

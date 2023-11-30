@@ -13,16 +13,33 @@
         <td class="">@op.Name</td>
         <td class="">@op.DeviceName</td>
         <td class="">@op.DeviceType</td>
-        <td class="cell">
-            <button class="delete-button" @onclick="() => DeleteOperation(op.OperationId, op.Name)">
-                <i class="fa-solid fa-trash icon"></i>
-            </button>
+        <td class="cell ">
 
+            <div class="d-flex align-items-center gap-3">
+               
 
-            <button @onclick="() => ShowAddDeviceModal(op.AssemblyId, op.OperationId)" class="btn-device d-flex align-items-center justify-content-center gap-3">
-                <i class="fa-solid fa-plus add-icon"></i>
-                <span>Add Device</span>
-            </button>
+                @if (string.IsNullOrEmpty(op.DeviceName))
+                {
+                    <button @onclick="() => ShowAddDeviceModal(op.AssemblyId, op.OperationId)" class="btn-device d-flex align-items-center justify-content-center gap-3">
+                        <i class="fa-solid fa-plus add-icon"></i>
+                        <span>Add Device</span>
+                    </button>
+                }
+                else
+                {
+                    <button  @onclick="() => ShowConditionModalWindow(op.AssemblyId, op.OperationId, op.Name)" class="btn-device d-flex align-items-center justify-content-center gap-3">
+                        <i class="fa-solid fa-plus add-icon"></i>
+                        <span>Add Device</span>
+                    </button>
+                }
+              
+
+                <button class="delete-button" @onclick="() => DeleteOperation(op.OperationId, op.Name)">
+                    <i class="fa-solid fa-trash icon"></i>
+                </button>
+
+            </div>
+           
 
         </td>
 
@@ -43,7 +60,8 @@
     public EventCallback Refresh { get; set; }
 
 
-    private string confirmMessage = "Are you sure you want to delete the operation \"{0}\"?";
+    private string confirmDeleteMessage = "Are you sure you want to delete the operation \"{0}\"?";
+    private string confirmAssignNewDevice = "This operation already has a device assigned. Are you sure you want to assign a new device?";
     private bool ConfirmResult { get; set; }
     private bool _showAddDeviceModalWindow = false;
 
@@ -51,8 +69,29 @@
     public int operationId { get; set; } = 0;
 
 
+    private async void ShowConditionModalWindow(int assemblyIdSelected, int operationIdSelected, string operationName)
+    {
+        if (string.IsNullOrEmpty(operationName))
+        {
+            _showAddDeviceModalWindow = true;
+        }
+        else
+        {
+            ConfirmResult = await _JSRuntime.InvokeAsync<bool>("confirm", confirmAssignNewDevice);
+            if (ConfirmResult)
+            {
+                _showAddDeviceModalWindow = true;
+            }
+        }
+
+        assemblyId = assemblyIdSelected;
+        operationId = operationIdSelected;
+        StateHasChanged();
+    }
+
     private void ShowAddDeviceModal(int assemblyIdSelected, int operationIdSelected)
     {
+
         assemblyId = assemblyIdSelected;
         operationId = operationIdSelected;
         _showAddDeviceModalWindow = !_showAddDeviceModalWindow;
@@ -61,7 +100,7 @@
 
     protected async Task DeleteOperation(int operationId, string operationName)
     {
-        ConfirmResult = await _JSRuntime.InvokeAsync<bool>("confirm", string.Format(confirmMessage, operationName)); // type
+        ConfirmResult = await _JSRuntime.InvokeAsync<bool>("confirm", string.Format(confirmDeleteMessage, operationName)); // type
 
         if (ConfirmResult)
         {
