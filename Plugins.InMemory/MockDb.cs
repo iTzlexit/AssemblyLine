@@ -16,6 +16,7 @@ namespace Plugins.InMemory
 
         static MockDb()
         {
+            InitializeAssemblies();
             InitializeDevices();
             InitializeOperations();
         }

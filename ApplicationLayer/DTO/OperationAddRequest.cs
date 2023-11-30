@@ -14,13 +14,12 @@ namespace AssemblyLine.ApplicationLayer.DTO
         [Required]
         public string Name { get; set; } = string.Empty;
         [Required]
-        [Range(1, 4)]
-        public int OrderInWhichToPerform { get; set; }
+        [Range(1, int.MaxValue, ErrorMessage = "Order cant be 0")]
+        public int? OrderInWhichToPerform { get; set; }
         public byte[] ImageData { get; set; } = new byte[0]; //store image of item being manufatured 
 
-        // Foreign key
-        public int DeviceId { get; set; }
-
+        [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "Please select an assembly")]
         public int AssemblyId { get; set; }
 
 
@@ -30,10 +29,9 @@ namespace AssemblyLine.ApplicationLayer.DTO
             {
                 OperationId = Id,
                 OperationName = Name.Trim(),
-                OrderInWhichToPerform = OrderInWhichToPerform,
+                OrderInWhichToPerform = OrderInWhichToPerform ?? 0,
                 ImageData = ImageData,
                 AssemblyId = AssemblyId,
-                DeviceId = DeviceId
 
 
             };

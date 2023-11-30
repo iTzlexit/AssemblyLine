@@ -2,7 +2,12 @@
 @inject IDeleteOperationUseCase _deleteOperationUseCase
 @inject IJSRuntime _JSRuntime;
 
-
+@if (Operations.Count == 0)
+{
+    <div class="alert alert-danger" role="alert">
+        <p>No operations found</p>
+    </div>
+}
 
 @foreach (var op in Operations)
 {

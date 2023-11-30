@@ -19,9 +19,9 @@ namespace AssemblyLine.ApplicationLayer.Operations.Interfaces
         }
 
 
-        public async Task<IEnumerable<OperationResponse>> ExecuteAsync()
+        public async Task<IEnumerable<OperationResponse>> ExecuteAsync( int? assemblyId)
         {
-            var response = await _operationRepository.GetOperationsAsync();
+            var response = await _operationRepository.GetOperationsAsync( assemblyId);
 
             return response;    
         }

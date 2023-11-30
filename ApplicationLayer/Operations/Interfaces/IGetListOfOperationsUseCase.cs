@@ -4,6 +4,6 @@ namespace AssemblyLine.ApplicationLayer.Operations.Interfaces
 {
     public interface IGetListOfOperationsUseCase
     {
-        Task<IEnumerable<OperationResponse>> ExecuteAsync();
+        Task<IEnumerable<OperationResponse>> ExecuteAsync(int? assemblyId);
     }
 }

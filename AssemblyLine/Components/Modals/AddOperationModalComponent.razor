@@ -1,4 +1,9 @@
-﻿
+﻿@inject IFetchAssembliesUseCase _fetchAssembliesUseCase
+@inject IAddOperationUseCase _addOperationUseCase
+
+@using AssemblyLine.ApplicationLayer.Assembly.Interface
+@using AssemblyLine.ApplicationLayer.DTO
+
 
 
 <div class="modal fade @_modalClass" id="informationalModal" tabindex="-1" aria-labelledby="informationalModalLabel" role="dialog" style="display:@_modalDisplay">
@@ -8,23 +13,38 @@
                 <h5 class="modal-title" id="informationalModalLabel">Add new operation</h5>
                 <button @onclick="CloseModal" type="button" class="custom-close-btn" aria-label="Close"></button>
             </div>
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <div class="alert alert-danger" role="alert">
+                    @errorMessage
+                </div>
+            }
+            <EditForm Model="operationAddRequest" OnValidSubmit="SubmitHandler">
+                <DataAnnotationsValidator />
+                   <div class="modal-body">
 
-            
-            <div class="modal-body">
-
-                <div class="row ">
+                <div class="row">
 
                     <div class="col-md-6">
 
                         <div>
                             <label for="assembly"> Select an assembly</label>
-                            <select id="assembly" class="general-select">
+                            <select id="assembly" class="general-select" @onchange= "SelectAssemblyChange">
+                                <option value="0" class="general-input">---------Select----------</option>
+                                @foreach (var assem in assemblyResponse)
+                                {
+                                    <option value="@assem.Id" class="general-input"> @assem.AssemblyName</option>
+                                }
                             </select>
+                                <ValidationMessage For="@(() => operationAddRequest.AssemblyId)" />
 
                         </div>
                     <div>
-                            <label for="order">Order of operation</label>
-                            <input class="general-input" />
+                            <label for="order">Order of operation </label>
+                            <input min="1" type="number" class="general-input" @bind-value="@operationAddRequest.OrderInWhichToPerform" />
+                                <ValidationMessage For="@(() => operationAddRequest.OrderInWhichToPerform)" />
+                             
+                              
                     </div>
 
                    
@@ -33,12 +53,18 @@
                     </div>
 
                     <div class=" col-md-6">
+                        <div>
+                                <label for="operationName">Name of operation</label>
+                                <input type="text" class="general-input" @bind-value="@operationAddRequest.Name"/>
+                                <ValidationMessage For="@(() => operationAddRequest.Name)" />
 
-                        <label for="operationName">Name of operation</label>
-                        <input class="general-input" />
-
-                        <img  />
-                        <input type="file" />
+                        </div>
+                     
+                        <div>
+                                <img />
+                                <input type="file" />
+                        </div>
+                       
 
                     </div>
 
@@ -61,7 +87,14 @@
                 </button>
 
 
-            </div>
+                </div>
+
+
+            </EditForm>
+         
+
+
+       
         </div>
     </div>
 </div>
@@ -75,11 +108,48 @@
 
 @code {
     [Parameter] public EventCallback ParentMethodToCallOnClickBtnClose { get; set; }
+    [Parameter]
+    public EventCallback Refresh { get; set; }
+    public List<AssemblyResponse> assemblyResponse { get; set; } = new();
+    public OperationAddRequest operationAddRequest { get; set; } = new();
+    public string errorMessage = string.Empty; 
+
+
+    public int AssemblyId { get; set; } = 0;
+
     private string _modalDisplay = null;
     private string _modalClass = null;
     private bool _showBackdrop = false;
 
-    protected override void OnInitialized() => ShowModal();
+    protected override async Task OnInitializedAsync()
+    {
+        assemblyResponse = (await _fetchAssembliesUseCase.ExecuteAsync()).ToList(); 
+        ShowModal();
+    }
+
+
+    private void SelectAssemblyChange(ChangeEventArgs changeEventArgs)
+    {
+        AssemblyId = Convert.ToInt32(changeEventArgs.Value);
+        operationAddRequest.AssemblyId = AssemblyId; 
+    }
+
+    private async Task SubmitHandler()
+    {
+        try
+        {
+            await _addOperationUseCase.ExecuteAsync(operationAddRequest);
+            await Refresh.InvokeAsync(); 
+            CloseModal();
+        }
+        catch (Exception ex)
+        {
+
+            errorMessage = ex.Message; 
+        }
+    }
+
+    // Modal methods
 
     private void ShowModal()
     {

@@ -1,5 +1,7 @@
 ﻿@inject IGetListOfOperationsUseCase _getListOfOperationsUseCase
+@inject IFetchAssembliesUseCase _fetchAssembliesUseCase
 @using ApplicationLayer.DTO
+@using AssemblyLine.ApplicationLayer.Assembly.Interface
 
 
 
@@ -18,9 +20,21 @@
                 <span>Add Device</span>
             </button>
 
+            <select id="assembly" class="general-select" @onchange="SelectAssembly">
+                @foreach (var assem in assemblyResponse)
+                {
+                    <option value="@assem.Id" class="general-option">@assem.AssemblyName</option>
+                }
+            </select>
 
         </div>
-       
+        <div>
+
+         
+
+
+
+        </div>
 
         <div class="">
 
@@ -42,13 +56,21 @@
 
                             </tr>
                         </thead>
+                    
                         <tbody>
-                            <OperationListItemComponent Refresh="RefreshData" Operations="Operations"></OperationListItemComponent>
+
+                            <OperationListItemComponent  Refresh="RefreshData" Operations="Operations"></OperationListItemComponent>
 
                         </tbody>
+
                     </table>
 
-
+                    @if (!string.IsNullOrEmpty(errorMessages))
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            <p>@errorMessages  </p>
+                        </div>
+                    }
                 </div>
 
             </div>
@@ -58,23 +80,32 @@
 
 </div>
 
-@if(_showAddDeviceModalWindow == true)
+@if (_showAddDeviceModalWindow == true)
 {
-    <AddDeviceModalComponent  ParentMethodToCallOnClickBtnClose="() => _showAddDeviceModalWindow = false"></AddDeviceModalComponent>
+    <AddDeviceModalComponent ParentMethodToCallOnClickBtnClose="() => _showAddDeviceModalWindow = false"></AddDeviceModalComponent>
 }
 
-@if(_showAddOperationModalWindow == true)
+@if (_showAddOperationModalWindow == true)
 {
-    <AddOperationModalComponent ParentMethodToCallOnClickBtnClose="() => _showAddOperationModalWindow = false"></AddOperationModalComponent>
+    <AddOperationModalComponent Refresh="RefreshData" ParentMethodToCallOnClickBtnClose="() => _showAddOperationModalWindow = false"></AddOperationModalComponent>
 }
 
 
-@code 
+@code
 {
 
     //For the grid
     public List<OperationResponse> Operations { get; set; } = new List<OperationResponse>();
-    public int? SelectedAssembly { get; set; }
+
+    private int MinAssemblyId = 0; 
+
+
+
+
+    public List<AssemblyResponse> assemblyResponse { get; set; } = new();
+    public int? SelectedAssembly { get; set; } = 0;
+
+    private string errorMessages = string.Empty;
 
     private bool _showAddDeviceModalWindow = false;
     private bool _showAddOperationModalWindow = false;
@@ -87,19 +118,31 @@
 
     private void ShowAddOperationModal()
     {
-        _showAddOperationModalWindow = !_showAddOperationModalWindow; 
-        StateHasChanged(); 
+        _showAddOperationModalWindow = !_showAddOperationModalWindow;
+        StateHasChanged();
     }
 
 
     protected override async Task OnInitializedAsync()
     {
         await RefreshData();
+ 
     }
 
     private async Task RefreshData()
     {
-        Operations = (await _getListOfOperationsUseCase.ExecuteAsync()).ToList(); 
+        try
+        {
+            Operations = (await _getListOfOperationsUseCase.ExecuteAsync(SelectedAssembly)).ToList();
+            assemblyResponse = (await _fetchAssembliesUseCase.ExecuteAsync()).ToList();
+
+        }
+        catch (Exception ex)
+        {
+
+            errorMessages = ex.Message;
+        }
+
 
     }
 

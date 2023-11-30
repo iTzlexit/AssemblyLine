@@ -1,5 +1,4 @@
 ﻿using AssemblyLine.ApplicationLayer.DTO;
-
 using AssemblyLine.ApplicationLayer.PluginInterfaces;
 using Entities;
 using System;
@@ -14,30 +13,52 @@ namespace Plugins.InMemory
     public class OperationRepository : IOperationRepository
     {
 
-        public async Task<IEnumerable<OperationResponse>> GetOperationsAsync() // assign assembly id number in order to filter it accordingly to assembly 
+        public async Task<IEnumerable<OperationResponse>> GetOperationsAsync(int? assemblyId)
         {
-            var operations = MockDb.DbOperations.OrderBy(o => o.OrderInWhichToPerform);
-            var response = new List<OperationResponse>();
+            var operations = new List<Operation>();
 
-            foreach (var operation in operations)
+            if (assemblyId == 0)
             {
-                var device = MockDb.DbDevices.FirstOrDefault(d => d.DeviceId == operation.DeviceId); 
+                // Get the min assembly ID
+                var maxAssemblyId = MockDb.DbOperations.Min(a => a.AssemblyId);
+                // Fetch operations for the assembly with the maximum ID
+                operations = MockDb.DbOperations
+                                    .Where(x => x.AssemblyId == maxAssemblyId)
+                                    .OrderBy(o => o.OrderInWhichToPerform)
+                                    .ToList();
 
-                var operationResponse = new OperationResponse
+                if (operations.Count < 0)
                 {
-                    OperationId = operation.OperationId,
-                    Name = operation.OperationName,
-                    OrderInWhichToPerform = operation.OrderInWhichToPerform,
-                    ImageData = operation.ImageData,
-                    DeviceName = device?.Name ?? "NA",
-                    DeviceType = device?.DeviceType.ToString() ?? "NA"
-                };
-
-                response.Add(operationResponse);
+                     throw new InvalidOperationException("There are no operations for the given assembly");
+                }
             }
+            else
+            {
+                // Fetch operations for the specified assembly ID
+                operations = MockDb.DbOperations
+                                    .Where(x => x.AssemblyId == assemblyId)
+                                    .OrderBy(o => o.OrderInWhichToPerform)
+                                    .ToList();
+
+                if (operations.Count < 0)
+                {
+                    throw new InvalidOperationException("There are no operations for the given assembly");
+                }
+            }
+
+            var response = operations.Select(operation => new OperationResponse
+            {
+                OperationId = operation.OperationId,
+                Name = operation.OperationName,
+                OrderInWhichToPerform = operation.OrderInWhichToPerform,
+                ImageData = operation.ImageData,
+                DeviceName = MockDb.DbDevices.FirstOrDefault(d => d.DeviceId == operation.DeviceId)?.Name ?? "",
+                DeviceType = MockDb.DbDevices.FirstOrDefault(d => d.DeviceId == operation.DeviceId)?.DeviceType.ToString() ?? ""
+            }).ToList();
 
             return await Task.FromResult(response);
         }
+
 
         /// <summary>
         /// It searches for an Operation with the specified operationId.
@@ -66,17 +87,17 @@ namespace Plugins.InMemory
                 return null; // or an appropriate response indicating the request is invalid
             }
 
-            bool exists = await ExistingOrderToPerform(operationRequest.OrderInWhichToPerform, operationRequest.AssemblyId);
+            bool exists = await ExistingOrderToPerform(operationRequest.OrderInWhichToPerform ?? 0, operationRequest.AssemblyId);
             if (exists)
             {
                 // Returning an appropriate response indicating the order already exists
                 throw new InvalidOperationException("An operation with the specified order already exists for this assembly. Please choose a different order number.");
             }
 
-            bool isSequential = await IsSequentialOrder(operationRequest.OrderInWhichToPerform, operationRequest.AssemblyId);
-            if (!isSequential)
+            bool isAllowed = await IsAllowedOrder(operationRequest.OrderInWhichToPerform ?? 0, operationRequest.AssemblyId);
+            if (!isAllowed)
             {
-                throw new InvalidOperationException("The order number must follow the sequence of existing operations. Please choose the next sequential order number.");
+                throw new InvalidOperationException("An operation with the specified order already exists for this assembly. Please choose a different order number.");
             }
 
 
@@ -103,21 +124,27 @@ namespace Plugins.InMemory
         }
 
         //Validation Check - checing the order is the next sequential number , 
-        public async Task<bool> IsSequentialOrder(int orderToPerform, int assemblyId)
-        {
-            int? maxOrder = MockDb.DbOperations
-                                  .Where(x => x.AssemblyId == assemblyId)
-                                  .Max(x => (int?)x.OrderInWhichToPerform);
 
-            // return true If no operations exist for this assembly, allow starting from order 1
-            if (!maxOrder.HasValue)
+        public async Task<bool> IsAllowedOrder(int orderToPerform, int assemblyId)
+        {
+            var existingOrders = MockDb.DbOperations
+                                        .Where(x => x.AssemblyId == assemblyId)
+                                        .Select(x => x.OrderInWhichToPerform)
+                                        .OrderBy(x => x)
+                                        .ToList();
+
+            if (existingOrders.Contains(orderToPerform))
             {
-                return await Task.FromResult(orderToPerform == 1);
+                // If the order number already exists, return false
+                return await Task.FromResult(false);
             }
 
-            // return true if the provided order is the next sequential number if its any other order besides the previous one it returns false 
-            return await Task.FromResult(orderToPerform == maxOrder.Value + 1); 
+            int nextAvailableOrder = existingOrders.Any() ? existingOrders.Last() + 1 : 1;
+
+            // Allow adding an order number if it's within the range of existing numbers or the next available number
+            return await Task.FromResult(orderToPerform <= nextAvailableOrder);
         }
+
 
 
     }

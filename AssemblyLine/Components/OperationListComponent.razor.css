@@ -70,3 +70,31 @@ tbody {
 .btn-device {
     background-color: #087f5b; 
 }
+
+.general-select {
+    width: 30%;
+    padding: 8px;
+    margin-bottom: 8px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+}
+
+.general-option {
+    border: none;
+    font-family: Dubai;
+    color: #808080;
+    font-weight: 600;
+    padding: 0.6rem 1.1rem;
+    font-size: 1.1rem;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 2px rgb(0, 0, 0, 0.2);
+}
+
+    .general-option:focus,
+    .general-option:hover {
+        outline: none;
+        border: none;
+        border-radius: 0.5rem;
+    }
