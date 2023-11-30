@@ -1,6 +1,6 @@
 ﻿using AssemblyLine.ApplicationLayer.DTO;
 
-namespace ApplicationLayer.Devices.Interfaces
+namespace AssemblyLine.ApplicationLayer.Devices.Interfaces
 {
     public interface IAddDeviceUseCase
     {

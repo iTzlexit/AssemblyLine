@@ -2,12 +2,6 @@
 @inject IDeleteOperationUseCase _deleteOperationUseCase
 @inject IJSRuntime _JSRuntime;
 
-@if (Operations.Count == 0)
-{
-    <div class="alert alert-danger" role="alert">
-        <p>No operations found</p>
-    </div>
-}
 
 @foreach (var op in Operations)
 {
@@ -24,18 +18,23 @@
                 <i class="fa-solid fa-trash icon"></i>
             </button>
 
+
+            <button @onclick="() => ShowAddDeviceModal(op.AssemblyId, op.OperationId)" class="btn-device d-flex align-items-center justify-content-center gap-3">
+                <i class="fa-solid fa-plus add-icon"></i>
+                <span>Add Device</span>
+            </button>
+
         </td>
-
-
 
 
     </tr>
 }
 
 
-
-
-
+@if (_showAddDeviceModalWindow == true)
+{
+    <AddDeviceModalComponent assemblyId="@assemblyId" operationId="@operationId" ParentMethodToCallOnClickBtnClose="() => _showAddDeviceModalWindow = false"></AddDeviceModalComponent>
+}
 
 @code {
     [Parameter]
@@ -46,8 +45,19 @@
 
     private string confirmMessage = "Are you sure you want to delete the operation \"{0}\"?";
     private bool ConfirmResult { get; set; }
+    private bool _showAddDeviceModalWindow = false;
+
+    public int assemblyId { get; set; } = 0;
+    public int operationId { get; set; } = 0;
 
 
+    private void ShowAddDeviceModal(int assemblyIdSelected, int operationIdSelected)
+    {
+        assemblyId = assemblyIdSelected;
+        operationId = operationIdSelected;
+        _showAddDeviceModalWindow = !_showAddDeviceModalWindow;
+        StateHasChanged();
+    }
 
     protected async Task DeleteOperation(int operationId, string operationName)
     {

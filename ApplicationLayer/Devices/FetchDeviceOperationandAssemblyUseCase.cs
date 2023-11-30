@@ -1,4 +1,4 @@
-﻿using ApplicationLayer.Devices.Interfaces;
+﻿using AssemblyLine.ApplicationLayer.Devices.Interfaces;
 using AssemblyLine.ApplicationLayer.DTO;
 using AssemblyLine.ApplicationLayer.PluginInterfaces;
 using System;
@@ -7,20 +7,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AssemblyLine.ApplicationLayer.Devices.Interfaces
+namespace AssemblyLine.ApplicationLayer.Devices
 {
-    public class FetchDeviceOperationandAssemblyUseCase: IFetchDeviceOperationandAssemblyUseCase
+    public class FetchDeviceTypes: IFetchDeviceTypes
     {
         private readonly IDeviceRepository _deviceRepository;
 
-        public FetchDeviceOperationandAssemblyUseCase(IDeviceRepository deviceRepository)
+        public FetchDeviceTypes(IDeviceRepository deviceRepository)
         {
             _deviceRepository = deviceRepository;
         }
 
-        public async Task<AssemblyOperationResponseForDevice> FetchDeviceModalContent(int selectedAssembly) 
+        public async Task<IEnumerable<ResponseForDeviceTypes>> Executeasync() 
         {
-            var response = await _deviceRepository.GetDeviceModalContent(selectedAssembly);
+            var response = await _deviceRepository.GetDeviceTypesForModal();
 
             return response;
         }

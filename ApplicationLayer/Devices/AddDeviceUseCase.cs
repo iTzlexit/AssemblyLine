@@ -1,4 +1,4 @@
-﻿using ApplicationLayer.Devices.Interfaces;
+﻿
 using AssemblyLine.ApplicationLayer.DTO;
 using AssemblyLine.ApplicationLayer.PluginInterfaces;
 using System;

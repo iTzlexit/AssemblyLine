@@ -15,12 +15,7 @@
                 <span>Add Operation</span>
             </button>
 
-            <button @onclick="() => ShowAddDeviceModal()" class="btn-device d-flex align-items-center justify-content-center gap-3">
-                <i class="fa-solid fa-plus add-icon"></i>
-                <span>Add Device</span>
-            </button>
-
-            <select id="assembly" class="general-select" @onchange="SelectAssembly">
+            <select id="assembly" class="assembly-select" @onchange="SelectAssembly">
                 @foreach (var assem in assemblyResponse)
                 {
                     <option value="@assem.Id" class="general-option">@assem.AssemblyName</option>
@@ -32,13 +27,9 @@
 
          
 
-
-
         </div>
 
         <div class="">
-
-
 
 
             <div class="table-container">
@@ -71,6 +62,14 @@
                             <p>@errorMessages  </p>
                         </div>
                     }
+
+
+                    @if (Operations.Count == 0)
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            <p>No operations found</p>
+                        </div>
+                    }
                 </div>
 
             </div>
@@ -80,10 +79,7 @@
 
 </div>
 
-@if (_showAddDeviceModalWindow == true)
-{
-    <AddDeviceModalComponent ParentMethodToCallOnClickBtnClose="() => _showAddDeviceModalWindow = false"></AddDeviceModalComponent>
-}
+
 
 @if (_showAddOperationModalWindow == true)
 {
@@ -107,14 +103,10 @@
 
     private string errorMessages = string.Empty;
 
-    private bool _showAddDeviceModalWindow = false;
+ 
     private bool _showAddOperationModalWindow = false;
 
-    private void ShowAddDeviceModal()
-    {
-        _showAddDeviceModalWindow = !_showAddDeviceModalWindow;
-        StateHasChanged();
-    }
+  
 
     private void ShowAddOperationModal()
     {

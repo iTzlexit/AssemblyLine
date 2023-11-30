@@ -11,10 +11,14 @@ namespace AssemblyLine.ApplicationLayer.DTO
     /// <summary>
     /// retrieve operations based on assemblies 
     /// </summary>
-    public class AssemblyOperationResponseForDevice
+    public class ResponseForDeviceTypes
     {
-        public List<AssemblyResponse> Assemblies { get; set; } = new List<AssemblyResponse>();
-        public List<string> DeviceTypes { get; set; } = Enum.GetNames(typeof(DeviceType)).ToList();
+
+        public int ID { get; set; }
+        public string Name { get; set; } = string.Empty;
 
     }
+
+  
+
 }

@@ -1,11 +1,9 @@
 ﻿.modal {
     padding: 3rem;
-   
 }
 
 .modal-content {
     border-radius: 5px;
-
 }
 
 .modal-header {
@@ -82,8 +80,57 @@
 .modal-footer-custom {
     display: flex;
     background-color: #fff;
-    gap:1rem;
+    gap: 1rem;
     padding: 0.2rem;
     margin: 0.7rem 1rem;
     border-radius: 5px;
 }
+
+label {
+    margin-bottom: 1px;
+    font-weight: 400;
+    font-family: Dubai;
+    font-size: 11px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+}
+
+
+input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 8px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+}
+
+
+.general-input, .general-select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 8px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+}
+
+
+.general-option {
+    border: none;
+    font-family: Dubai;
+    color: #808080;
+    font-weight: 600;
+    padding: 0.6rem 1.1rem;
+    font-size: 1.1rem;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 2px rgb(0, 0, 0, 0.2);
+}
+
+    .general-option:focus,
+    .general-option:hover {
+        outline: none;
+        border: none;
+        border-radius: 0.5rem;
+    }

@@ -71,13 +71,20 @@ tbody {
     background-color: #087f5b; 
 }
 
-.general-select {
-    width: 30%;
-    padding: 8px;
-    margin-bottom: 8px;
-    border: 1px solid #cccccc;
-    border-radius: 4px;
+
+/*----------------------inputs */
+
+.assembly-select {
+    width: 15rem;
+    border: none;
+    padding: 0.6rem 0.8rem;
+   
+    background-color: #fff;
+    box-shadow: 0 1px 2px rgb(0, 0, 0, 0.2);
 }
+
+
+
 
 .general-option {
     border: none;

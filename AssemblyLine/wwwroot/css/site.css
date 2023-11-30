@@ -73,7 +73,7 @@ input, .general-select {
     }
 
 
-    .general-select:focus, .general-input:focus, .general-option:focus{
+    .general-select:focus, .general-input:focus, .general-option:focus, select:focus{
         outline: none;
         box-shadow: 0 0 0 0.3rem rgba(190, 189, 189, 0.722);
     }

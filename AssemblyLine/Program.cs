@@ -1,6 +1,6 @@
-using ApplicationLayer.Devices;
+
 using AssemblyLine.ApplicationLayer.Operations.Interfaces; 
-using ApplicationLayer.Devices.Interfaces;
+
 using AssemblyLine.ApplicationLayer.PluginInterfaces;
 using AssemblyLine.Data;
 using Microsoft.AspNetCore.Components;
@@ -9,6 +9,7 @@ using Plugins.InMemory;
 using AssemblyLine.ApplicationLayer.Devices.Interfaces;
 using ApplicationLayer.Assembly;
 using AssemblyLine.ApplicationLayer.Assembly.Interface;
+using AssemblyLine.ApplicationLayer.Devices;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,7 +26,7 @@ builder.Services.AddSingleton<IAssemblyRepository, AssemblyRepository>();
 
 //Device use cases 
 builder.Services.AddTransient<IAddDeviceUseCase, AddDeviceUseCase>(); 
-builder.Services.AddTransient<IFetchDeviceOperationandAssemblyUseCase, FetchDeviceOperationandAssemblyUseCase>(); 
+builder.Services.AddTransient<IFetchDeviceTypes, FetchDeviceTypes>(); 
 
 //Operations Use Cases
 
