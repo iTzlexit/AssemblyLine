@@ -2,6 +2,7 @@
 using AssemblyLine.ApplicationLayer.PluginInterfaces;
 using Entities;
 using System;
+using System.Reflection;
 
 
 namespace Plugins.InMemory
@@ -87,17 +88,25 @@ namespace Plugins.InMemory
                 return null; // or an appropriate response indicating the request is invalid
             }
 
+            // First check: If there are no operations, the first must start at order 1
+            bool startOrderCheck = StartOrderNumber(operationRequest.OrderInWhichToPerform ?? 0, operationRequest.AssemblyId);
+            if (!startOrderCheck)
+            {
+                throw new InvalidOperationException("The first operation for an assembly must start at order number 1.");
+            }
+
+            // Second check: If the order already exists
             bool exists = await ExistingOrderToPerform(operationRequest.OrderInWhichToPerform ?? 0, operationRequest.AssemblyId);
             if (exists)
             {
-                // Returning an appropriate response indicating the order already exists
                 throw new InvalidOperationException("An operation with the specified order already exists for this assembly. Please choose a different order number.");
             }
 
-            bool isAllowed = await IsAllowedOrder(operationRequest.OrderInWhichToPerform ?? 0, operationRequest.AssemblyId);
+            // Third check: If the order is allowed (considering gaps and sequence)
+            bool isAllowed = IsAllowedOrder(operationRequest.OrderInWhichToPerform ?? 0, operationRequest.AssemblyId);
             if (!isAllowed)
             {
-                throw new InvalidOperationException("An operation with the specified order already exists for this assembly. Please choose a different order number.");
+                throw new InvalidOperationException("The order number is not valid. Please choose a different order number or follow the sequence of orders to perform .");
             }
 
 
@@ -123,9 +132,34 @@ namespace Plugins.InMemory
            .Any(x => x.AssemblyId == assemblyId && x.OrderInWhichToPerform == orderToPerform));
         }
 
+        //Validation Check where the user can only start at order\topPerform 1 if there are no operations created 
+
+
+
         //Validation Check - checing the order is the next sequential number , 
 
-        public async Task<bool> IsAllowedOrder(int orderToPerform, int assemblyId)
+        public bool StartOrderNumber(int orderToPerform, int assemblyId)
+        {
+            var existingOrders = MockDb.DbOperations
+                                        .Where(x => x.AssemblyId == assemblyId)
+                                        .Select(x => x.OrderInWhichToPerform)
+                                        .ToList();
+
+            // If there are no existing orders, check if the order number is 1
+            if (!existingOrders.Any())
+            {
+                // Return true only if orderToPerform is 1
+                return orderToPerform == 1;
+            }
+
+            // If there are existing orders, this validation is not applicable, return true
+            return true;
+        }
+
+
+
+
+        public bool IsAllowedOrder(int orderToPerform, int assemblyId)
         {
             var existingOrders = MockDb.DbOperations
                                         .Where(x => x.AssemblyId == assemblyId)
@@ -133,19 +167,55 @@ namespace Plugins.InMemory
                                         .OrderBy(x => x)
                                         .ToList();
 
-            if (existingOrders.Contains(orderToPerform))
+            // If there are no existing orders, only allow order number 1
+            if (!existingOrders.Any())
             {
-                // If the order number already exists, return false
-                return await Task.FromResult(false);
+                return true;
             }
 
-            int nextAvailableOrder = existingOrders.Any() ? existingOrders.Last() + 1 : 1;
+            // If the order number already exists, return false
+            if (existingOrders.Contains(orderToPerform))
+            {
+                return false;
+            }
 
-            // Allow adding an order number if it's within the range of existing numbers or the next available number
-            return await Task.FromResult(orderToPerform <= nextAvailableOrder);
+            // Determine the maximum order number currently in use
+            int maxOrder = existingOrders.Max();
+
+            // Check for gaps in the sequence and allow if the order number is within the gap
+            for (int i = 1; i <= maxOrder; i++)
+            {
+                if (!existingOrders.Contains(i))
+                {
+                    if (i == orderToPerform)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            // Allow adding an order number if it's exactly one more than the current maximum
+            return orderToPerform == maxOrder + 1;
         }
 
 
+
+
+
+        public async Task <int?> GetDefaultOrderOperation(int assemblyId)
+        {
+            var assemblies = MockDb.DbAssemblies;
+
+
+            if (assemblyId == 0)
+            {
+                return null; 
+            }
+
+            var operationsCount = MockDb.DbOperations.Where(x => x.AssemblyId == assemblyId).Count();
+
+            return await Task.FromResult(operationsCount + 1);
+        }
 
     }
 }

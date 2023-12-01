@@ -6,6 +6,7 @@ using AssemblyLine.ApplicationLayer.Devices.Interfaces;
 using ApplicationLayer.Assembly;
 using AssemblyLine.ApplicationLayer.Assembly.Interface;
 using AssemblyLine.ApplicationLayer.Devices;
+using ApplicationLayer.Operations;
 
 
 
@@ -31,7 +32,8 @@ builder.Services.AddTransient<IAddOperationUseCase, AddOperationUseCase>();
 builder.Services.AddTransient<IDeleteOperationUseCase, DeleteOperationUseCase>();
 builder.Services.AddTransient<IGetListOfOperationsUseCase, GetListOfOperationsUseCase>();
 builder.Services.AddTransient<IFetchAssembliesUseCase, FetchAssembliesUseCase>(); 
-builder.Services.AddTransient<IFetchAssemblyWithDefaultOrderNumber, FetchAssemblyWithDefaultOrderNumber>(); 
+builder.Services.AddTransient<IGetTheDefaultOrderOfOperationUseCase, GetTheDefaultOrderOfOperationUseCase>(); 
+
 
 //----------Pipeline ----------------
 

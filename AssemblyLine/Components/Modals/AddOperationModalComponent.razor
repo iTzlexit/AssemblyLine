@@ -1,5 +1,6 @@
-﻿@inject IFetchAssemblyWithDefaultOrderNumber _fetchAssemblyWithDefaultOrderNumber
+﻿@inject IFetchAssembliesUseCase _fetchAssembliesUseCase
 @inject IAddOperationUseCase _addOperationUseCase
+@inject IGetTheDefaultOrderOfOperationUseCase _etTheDefaultOrderOfOperationUseCase
 
 @using ApplicationLayer.Assembly.Interface
 
@@ -22,50 +23,56 @@
             }
             <EditForm Model="operationAddRequest" OnValidSubmit="SubmitHandler">
                 <DataAnnotationsValidator />
-                   <div class="modal-body">
+                <div class="modal-body">
 
-                <div class="row">
+                    <div class="row">
 
-                    <div class="col-md-6">
+                        <div class="col-md-6">
 
-                        <div>
-                            <label for="assembly"> Select an assembly</label>
+                            <div>
+                                <label for="assembly"> Select an assembly</label>
                                 <select id="assembly" class="general-select" @onchange="SelectAssemblyChange">
-                                <option value="0" class="general-input">---------Select----------</option>
-                                @foreach (var assem in assemblyResponse)
-                                {
-                                    <option value="@assem.Id" class="general-input"> @assem.AssemblyName</option>
-                                }
-                            </select>
+                                    <option value="0" class="general-input">---------Select----------</option>
+                                    @foreach (var assem in assemblyResponse)
+                                    {
+                                        <option value="@assem.Id" class="general-input"> @assem.AssemblyName</option>
+                                    }
+                                </select>
                                 <ValidationMessage For="@(() => operationAddRequest.AssemblyId)" />
 
-                        </div>
-                    <div>
-                            <label for="order">Order of operation </label>
-                            <input min="1" type="number" class="general-input" @bind-value="@operationAddRequest.OrderInWhichToPerform" />
+                            </div>
+                            <div>
+                                <label for="order">Order of operation </label>
+
+                                <input min="1" type="number" class="general-input" @bind-value="@operationAddRequest.OrderInWhichToPerform" />
+
                                 <ValidationMessage For="@(() => operationAddRequest.OrderInWhichToPerform)" />
-                             
-                              
-                    </div>
-
-                   
 
 
-                    </div>
+                            </div>
 
-                    <div class=" col-md-6">
-                        <div>
+
+
+
+                        </div>
+
+                        <div class=" col-md-6">
+                            <div>
                                 <label for="operationName">Name of operation</label>
-                                <input type="text" class="general-input" @bind-value="@operationAddRequest.Name"/>
+                                <input type="text" class="general-input" @bind-value="@operationAddRequest.Name" />
                                 <ValidationMessage For="@(() => operationAddRequest.Name)" />
 
-                        </div>
-                     
-                        <div>
+                            </div>
+
+                            <div>
                                 <img />
                                 <input type="file" />
+                            </div>
+
+
                         </div>
-                       
+
+
 
                     </div>
 
@@ -73,29 +80,25 @@
 
                 </div>
 
+                <div class="modal-footer-custom">
+                    <button type="submit" class="btn-submit d-flex align-items-center justify-content-center gap-3">
 
+                        Submit
+                    </button>
 
-            </div>
-
-            <div class="modal-footer-custom">
-                <button type="submit" class="btn-submit d-flex align-items-center justify-content-center gap-3">
-
-                    Submit
-                </button>
-
-                <button @onclick="() => CloseModal()" class="btn-closer d-flex align-items-center justify-content-center gap-3">
-                    Close
-                </button>
+                    <button @onclick="() => CloseModal()" class="btn-closer d-flex align-items-center justify-content-center gap-3">
+                        Close
+                    </button>
 
 
                 </div>
 
 
             </EditForm>
-         
 
 
-       
+
+
         </div>
     </div>
 </div>
@@ -113,8 +116,8 @@
     public EventCallback Refresh { get; set; }
     public List<AssemblyResponse> assemblyResponse { get; set; } = new();
     public OperationAddRequest operationAddRequest { get; set; } = new();
-    public string errorMessage = string.Empty; 
-
+    public string errorMessage = string.Empty;
+    private int? OrderOfOperation = 0;
 
     public int AssemblyId { get; set; } = 0;
 
@@ -124,26 +127,39 @@
 
     protected override async Task OnInitializedAsync()
     {
-        assemblyResponse = (await _fetchAssemblyWithDefaultOrderNumber.ExecuteAsync(operationAddRequest.AssemblyId)).ToList();
+        await RefreshData();
         ShowModal();
+
     }
 
 
-    private void SelectAssemblyChange(ChangeEventArgs changeEventArgs)
+    private async Task RefreshData()
+    {
+        assemblyResponse = (await _fetchAssembliesUseCase.ExecuteAsync()).ToList();
+
+
+    }
+
+    private async Task RetrieveOrderNumer()
+    {
+        OrderOfOperation = (await _etTheDefaultOrderOfOperationUseCase.ExecuteAsyc(AssemblyId));
+        operationAddRequest.OrderInWhichToPerform = OrderOfOperation;
+
+    }
+
+    private async void SelectAssemblyChange(ChangeEventArgs changeEventArgs)
     {
         AssemblyId = Convert.ToInt32(changeEventArgs.Value);
         operationAddRequest.AssemblyId = AssemblyId;
 
-        var selectedAssembly = assemblyResponse.FirstOrDefault(a => a.Id == AssemblyId);
-        if (selectedAssembly != null)
-        {
-            operationAddRequest.OrderInWhichToPerform = selectedAssembly.DefaultOrderNumber;
-        }
-        else
-        {
-            operationAddRequest.OrderInWhichToPerform = 0; // Or any default value for non-selected assemblies
-        }
+
+       
+        await RetrieveOrderNumer();
+
+
+
     }
+
 
 
     private async Task SubmitHandler()
@@ -151,13 +167,13 @@
         try
         {
             await _addOperationUseCase.ExecuteAsync(operationAddRequest);
-            await Refresh.InvokeAsync(); 
+            await Refresh.InvokeAsync();
             CloseModal();
         }
         catch (Exception ex)
         {
 
-            errorMessage = ex.Message; 
+            errorMessage = ex.Message;
         }
     }
 

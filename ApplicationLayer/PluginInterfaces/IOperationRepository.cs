@@ -9,5 +9,6 @@ namespace AssemblyLine.ApplicationLayer.PluginInterfaces
 
         Task<OperationResponse> AddOperationAsync(OperationAddRequest operationRequest);
 
+        Task<int?> GetDefaultOrderOperation(int assemblyId);
     }
 }
