@@ -51,11 +51,6 @@ namespace Plugins.InMemory
                 return await Task.FromResult(false);
             }
 
-            if (operation.DeviceId != 0)
-            {
-                // Operation already has a device assigned
-                return await Task.FromResult(false);
-            }
 
             operation.DeviceId = deviceId;
             return await Task.FromResult(true);

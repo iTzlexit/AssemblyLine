@@ -13,7 +13,13 @@
                 <h5 class="modal-title" id="informationalModalLabel">Add new device</h5>
                 <button @onclick="CloseModal" type="button" class="custom-close-btn" aria-label="Close"></button>
             </div>
-        
+
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <div class="alert alert-danger" role="alert">
+                    @errorMessage
+                </div>
+            }
             <EditForm Model="deviceAddRequest" OnValidSubmit="SubmitHandler">
                 <DataAnnotationsValidator />
                 <div class="modal-body">
@@ -120,10 +126,6 @@
         responseForDeviceTypes = (await _fetchDeviceOperationandAssemblyUseCase.Executeasync()).ToList();
         ShowModal();
     }
-
-
-
-
 
     private async Task SubmitHandler()
     {

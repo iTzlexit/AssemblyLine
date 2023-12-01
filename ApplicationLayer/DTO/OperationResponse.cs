@@ -29,6 +29,7 @@ namespace AssemblyLine.ApplicationLayer.DTO
             return operations.Select(o => new OperationResponse
             {
                 OperationId = o.OperationId,
+                AssemblyId = o.AssemblyId,
                 Name = o.OperationName,
                 OrderInWhichToPerform = o.OrderInWhichToPerform,
                 ImageData = o.ImageData,

@@ -50,6 +50,7 @@ namespace Plugins.InMemory
             var response = operations.Select(operation => new OperationResponse
             {
                 OperationId = operation.OperationId,
+                AssemblyId = operation.AssemblyId,
                 Name = operation.OperationName,
                 OrderInWhichToPerform = operation.OrderInWhichToPerform,
                 ImageData = operation.ImageData,
@@ -88,7 +89,7 @@ namespace Plugins.InMemory
                 return null; // or an appropriate response indicating the request is invalid
             }
 
-            // First check: If there are no operations, the first must start at order 1
+            // First check: If there are no operations, the first operation must start at order to perform 1
             bool startOrderCheck = StartOrderNumber(operationRequest.OrderInWhichToPerform ?? 0, operationRequest.AssemblyId);
             if (!startOrderCheck)
             {
@@ -132,11 +133,6 @@ namespace Plugins.InMemory
            .Any(x => x.AssemblyId == assemblyId && x.OrderInWhichToPerform == orderToPerform));
         }
 
-        //Validation Check where the user can only start at order\topPerform 1 if there are no operations created 
-
-
-
-        //Validation Check - checing the order is the next sequential number , 
 
         public bool StartOrderNumber(int orderToPerform, int assemblyId)
         {
