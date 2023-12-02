@@ -29,8 +29,17 @@ namespace Plugins.InMemory
                 bool assignmentSuccess = await AssignDeviceToAssemblyOperation(deviceAddRequest.OperationId, deviceAddRequest.Id, deviceAddRequest.AssemblyId);
                 if (!assignmentSuccess) // if true
                 {
-                    throw new InvalidOperationException("WAs unable to assign a device to the operation");
+                    throw new InvalidOperationException("Was unable to assign a device to the operation");
                 }
+
+                bool deviceExistsInAssembly = await DeviceAlreadyExists(deviceAddRequest.OperationId, deviceAddRequest.DeviceTypeId, deviceAddRequest.AssemblyId); 
+
+                if(deviceExistsInAssembly)
+                {
+
+                    throw new InvalidOperationException("You cant assign the same device type to the same assembly line"); 
+                }
+
             }
 
 
@@ -38,9 +47,41 @@ namespace Plugins.InMemory
 
         }
 
-       
+
+        // if device type already exists for a particular assembly then return an error 
+        public async Task<bool> DeviceAlreadyExists(int operationId, int deviceTypeId, int assemblyId)
+        {
+            // Retrieve all operations associated with the given assembly
+            var operationsInAssembly = MockDb.DbOperations.Where(x => x.AssemblyId == assemblyId);
+
+            // Iterate through the operations to check if any of them has a device with the same type
+            foreach (var operation in operationsInAssembly)
+            {
+                // Check if the current operation is not the one we are trying to add the device to
+                if (operation.OperationId != operationId)
+                {
+                    // Retrieve the device associated with this operation
+                    var device = MockDb.DbDevices.FirstOrDefault(x => x.DeviceId == operation.DeviceId);
+
+                    // Check if the device exists and its type matches the requested type
+                    if (device != null && device.DeviceType == (DeviceType)deviceTypeId)
+                    {
+                        // Found a device with the same type in the same assembly
+                        return await Task.FromResult(true);
+                    }
+                }
+            }
+
+            // No device of the same type found in the same assembly
+            return await Task.FromResult(false);
+        }
+
+
+
+
+
         ///  assigns a device to an operation that belongs to a particular assembly, if returns false  /
-       
+
         public async Task<bool> AssignDeviceToAssemblyOperation(int operationId, int deviceId, int assemblyId)
         {
             var operation = MockDb.DbOperations.FirstOrDefault(o => o.OperationId == operationId);
