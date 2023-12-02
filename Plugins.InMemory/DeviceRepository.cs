@@ -20,9 +20,6 @@ namespace Plugins.InMemory
             deviceAddRequest.Id = maxId +1;
 
 
-
-          
-
             if (deviceAddRequest.OperationId > 0)
             {
                 bool assignmentSuccess = await AssignDeviceToAssemblyOperation(deviceAddRequest.OperationId, deviceAddRequest.Id, deviceAddRequest.AssemblyId);
@@ -93,14 +90,21 @@ namespace Plugins.InMemory
                 return await Task.FromResult(false);
             }
 
+            // Check if the operation already has a different device assigned
+            if (operation.DeviceId != 0 && operation.DeviceId != deviceId)
+            {
+                // An existing device is already assigned to this operation
+                return await Task.FromResult(false);
+            }
 
             operation.DeviceId = deviceId;
             return await Task.FromResult(true);
         }
 
 
+
         //----------------------Fetching the assemblies and operations for add device modal and populate the operation based on assembly ---------//
-   
+
         public async Task<IEnumerable<ResponseForDeviceTypes>> GetDeviceTypesForModal()
         {
          
