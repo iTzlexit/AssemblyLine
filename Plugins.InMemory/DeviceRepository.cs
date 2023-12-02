@@ -21,8 +21,7 @@ namespace Plugins.InMemory
 
 
 
-            var toDeviceEntity = deviceAddRequest.ToDeviceEntity();
-            MockDb.DbDevices.Add(toDeviceEntity);
+          
 
             if (deviceAddRequest.OperationId > 0)
             {
@@ -37,10 +36,12 @@ namespace Plugins.InMemory
                 if(deviceExistsInAssembly)
                 {
 
-                    throw new InvalidOperationException("You cant assign the same device type to the same assembly line"); 
+                    throw new InvalidOperationException("You cant assign the same device type to the same assembly line, assign a new device"); 
                 }
 
             }
+            var toDeviceEntity = deviceAddRequest.ToDeviceEntity();
+            MockDb.DbDevices.Add(toDeviceEntity);
 
 
             return await Task.FromResult<DeviceResponse>( new DeviceResponse { DeviceId = toDeviceEntity.DeviceId, Name = toDeviceEntity.Name});
