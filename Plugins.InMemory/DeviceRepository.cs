@@ -7,43 +7,59 @@ namespace Plugins.InMemory
 {
     public class DeviceRepository: IDeviceRepository
     {
-       
         public async Task<DeviceResponse> AddDeviceAsync(DeviceAddRequest deviceAddRequest)
         {
-            if(deviceAddRequest == null)
+            if (deviceAddRequest == null)
             {
                 return await Task.FromResult<DeviceResponse>(null);
             }
 
-            var maxId = MockDb.DbDevices.Any() ? MockDb.DbDevices.Max(x => x.DeviceId) : 0; 
-
-            deviceAddRequest.Id = maxId +1;
-
+            var maxId = MockDb.DbDevices.Any() ? MockDb.DbDevices.Max(x => x.DeviceId) : 0;
+            deviceAddRequest.Id = maxId + 1;
 
             if (deviceAddRequest.OperationId > 0)
             {
-                bool assignmentSuccess = await AssignDeviceToAssemblyOperation(deviceAddRequest.OperationId, deviceAddRequest.Id, deviceAddRequest.AssemblyId);
-                if (!assignmentSuccess) // if true
+                var operation = MockDb.DbOperations.FirstOrDefault(o => o.OperationId == deviceAddRequest.OperationId);
+                if (operation != null)
                 {
-                    throw new InvalidOperationException("Was unable to assign a device to the operation");
+                    var existingDevice = MockDb.DbDevices.FirstOrDefault(d => d.DeviceId == operation.DeviceId);
+
+                    if (existingDevice != null && existingDevice.DeviceType == (DeviceType)deviceAddRequest.DeviceTypeId)
+                    {
+                        // Replace the existing device's name
+                        existingDevice.Name = deviceAddRequest.Name;
+                        return await Task.FromResult(new DeviceResponse { DeviceId = existingDevice.DeviceId, Name = existingDevice.Name });
+                    }
+                    else
+                    {
+                        // Check if the device type already exists in the assembly
+                        bool deviceExistsInAssembly = await DeviceAlreadyExists(deviceAddRequest.OperationId, deviceAddRequest.DeviceTypeId, deviceAddRequest.AssemblyId);
+                        if (deviceExistsInAssembly)
+                        {
+                            throw new InvalidOperationException("You can't assign the same device type to the same assembly line");
+                        }
+                    }
+
+                    bool assignmentSuccess = await AssignDeviceToAssemblyOperation(deviceAddRequest.OperationId, deviceAddRequest.Id, deviceAddRequest.AssemblyId);
+                    if (!assignmentSuccess)
+                    {
+                        throw new InvalidOperationException("Was unable to assign a device to the operation");
+                    }
                 }
-
-                bool deviceExistsInAssembly = await DeviceAlreadyExists(deviceAddRequest.OperationId, deviceAddRequest.DeviceTypeId, deviceAddRequest.AssemblyId); 
-
-                if(deviceExistsInAssembly)
+                else
                 {
-
-                    throw new InvalidOperationException("You cant assign the same device type to the same assembly line, assign a new device"); 
+                    throw new InvalidOperationException("The specified operation does not exist");
                 }
-
             }
+
             var toDeviceEntity = deviceAddRequest.ToDeviceEntity();
             MockDb.DbDevices.Add(toDeviceEntity);
 
-
-            return await Task.FromResult<DeviceResponse>( new DeviceResponse { DeviceId = toDeviceEntity.DeviceId, Name = toDeviceEntity.Name});
-
+            return await Task.FromResult(new DeviceResponse { DeviceId = toDeviceEntity.DeviceId, Name = toDeviceEntity.Name });
         }
+
+
+
 
 
         // if device type already exists for a particular assembly then return an error 

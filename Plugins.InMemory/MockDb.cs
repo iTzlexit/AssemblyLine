@@ -48,12 +48,14 @@ namespace Plugins.InMemory
         {
             DbOperations = new List<Operation>
             {
-                new Operation { OperationId = 1, OperationName = "Scan Items", OrderInWhichToPerform = 1, ImageData = new byte[0], DeviceId = 1, AssemblyId = 1 },
-                new Operation { OperationId = 2, OperationName = "Print Labels", OrderInWhichToPerform = 2, ImageData = new byte[0], DeviceId = 2, AssemblyId = 1 },
-                new Operation { OperationId = 3, OperationName = "Capture Images", OrderInWhichToPerform = 3, ImageData = new byte[0], DeviceId = 3, AssemblyId = 1 },
-                new Operation { OperationId = 4, OperationName = "Organize Trays", OrderInWhichToPerform = 4, ImageData = new byte[0], DeviceId = 4, AssemblyId = 1 }
+           
+                new Operation { OperationId = 1, OperationName = "Scan Items", OrderInWhichToPerform = 1, ImageData = new byte[0], DeviceId = 0, AssemblyId = 1 },
+                new Operation { OperationId = 2, OperationName = "Print Labels", OrderInWhichToPerform = 2, ImageData = new byte[0], DeviceId = 0, AssemblyId = 1 },
+                new Operation { OperationId = 3, OperationName = "Capture Images", OrderInWhichToPerform = 3, ImageData = new byte[0], DeviceId = 0, AssemblyId = 1 },
+           
             };
         }
+
 
 
         private static void AssociateOperationsToAssemblies()
